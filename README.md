@@ -31,7 +31,7 @@ TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
 ```
 
 ## Docker :whale:
-There is a docker image for the hipsters who want to run everything with docker.
+There is a [docker image](https://hub.docker.com/r/rolfkoenders/transip-dyndns/) for the hipsters who want to run everything with docker.
 
 ```
 docker pull rolfkoenders/transip-dyndns
