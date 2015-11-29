@@ -1,0 +1,9 @@
+{
+  "transip": {
+    "login": "",
+    "privateKeyPath": ""
+  },
+  "domain": "",
+  "dnsRecord": "",
+  "logLocation": "./output.log"
+}

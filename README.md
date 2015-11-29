@@ -2,7 +2,22 @@
 Keeps a dns record on a [transip](http://www.transip.nl) domain up to date with the current WAN IP.
 
 ## Configure
-The configuration is done through environment variables.
+In the config folder there is an example config file. Save that file as `config.json` and that one will be used. This is the example config:
+
+```json
+{
+  "transip": {
+    "login": "",
+    "privateKeyPath": ""
+  },
+  "domain": "",
+  "dnsRecord": "",
+  "logLocation": "./output.log"
+}
+
+```
+
+Its also possible to use environment variables.
 
 ```bash
 # Required

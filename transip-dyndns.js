@@ -4,19 +4,16 @@ var TransIP = require('transip'),
     Promise = require('bluebird'),
     bunyan  = require('bunyan'),
     fs      = require('fs'),
-    _       = require('lodash');
+    _       = require('lodash'),
+    config  = require('./config');
 
 // Check for the environment variables
-var TRANSIP_LOGIN = process.env.TRANSIP_LOGIN;
-var PRIVATE_KEY_LOCATION = process.env.TRANSIP_PRIVATE_KEY;
-var DOMAIN = process.env.TRANSIP_DOMAIN;
-var DNS_RECORD = process.env.TRANSIP_DNS_RECORD;
-var LOG_LOCATION = process.env.TRANSIP_LOG_LOCATION || './output.log';
+var TRANSIP_LOGIN = config.get('transip.login')
+var PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
+var DOMAIN = config.get('domain');
+var DNS_RECORD = config.get('dnsRecord');
+var LOG_LOCATION = config.get('logLocation');
 
-if(!TRANSIP_LOGIN || !PRIVATE_KEY_LOCATION || !DOMAIN || !DNS_RECORD) {
-  console.log('Environment variables: \'TRANSIP_LOGIN\' & \'PRIVATE_KEY_LOCATION\' & \'TRANSIP_DOMAIN\' & \'TRANSIP_DNS_RECORD\' must be set.');
-  process.exit(1);
-}
 // Load privateKeyFile contents
 var TRANSIP_PRIVATE_KEY= fs.readFileSync(PRIVATE_KEY_LOCATION, {encoding:'utf-8'});
 if(!TRANSIP_PRIVATE_KEY) {
