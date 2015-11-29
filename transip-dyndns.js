@@ -5,7 +5,7 @@ var TransIP = require('transip'),
     bunyan  = require('bunyan'),
     fs      = require('fs'),
     _       = require('lodash'),
-    config  = require('./config');
+    config  = require('./config.js');
 
 // Check for the environment variables
 var TRANSIP_LOGIN = config.get('transip.login')

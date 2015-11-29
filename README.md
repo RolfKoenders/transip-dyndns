@@ -2,7 +2,7 @@
 Keeps a dns record on a [transip](http://www.transip.nl) domain up to date with the current WAN IP.
 
 ## Configure
-In the config folder there is an example config file. Save that file as `config.json` and that one will be used. This is the example config:
+In the root folder there is an `config-example.json` file. Save that file as `config.json` and that one will be used. This is the example config:
 
 ```json
 {
@@ -28,4 +28,23 @@ TRANSIP_DNS_RECORD=<name of the dns record to update>
 
 # Optional
 TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
+```
+
+## Docker
+There is a Dockerfile for the hipsters who want to run everything with docker.
+
+
+### Run
+To run the container we need to mount 2 volumes.
+* Directory where the privateKey can be found.
+* Directory where the config file is stored.
+
+```
+docker run -t -v /home/<user>/.secrets/transip:/secrets -v /home/<user>/configurations/transip-config/:/config <namespace>/transip-dyndns
+```
+
+### Build
+If you want to build the image yourself:
+```
+docker build -t <namespace>/transip-dyndns .
 ```
