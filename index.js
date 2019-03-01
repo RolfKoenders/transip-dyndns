@@ -31,10 +31,8 @@ const checkDomain = require('./checkDomain.js');
 // Load privateKeyFile contents
 const TRANSIP_PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_LOCATION, { encoding: 'utf-8' });
 if (!TRANSIP_PRIVATE_KEY) {
-    /* eslint-disable no-console */
-    console.log('PrivateKey cannot be read.');
+    log.error('PrivateKey cannot be read.');
     process.exit(1);
-    /* eslint-enable no-console */
 }
 
 const transIpInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);

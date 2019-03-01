@@ -22,11 +22,13 @@ In the root folder there is an `config-example.json` file. Save that file as `co
          "domain": "example.net",
          "dnsEntries": [
            {
-             "name": "@"
+             "name": "@",
+             "type": "a",
            },
            {
-             "name": "A",
-             "content": "XXX.XXX.XXX.XXX"
+             "name": "prefix",
+             "type": "cname",
+             "content": "@"
            }
          ]
        }
@@ -37,6 +39,15 @@ In the root folder there is an `config-example.json` file. Save that file as `co
 
 ```
 
+##### dnsEntry attributes
+````json
+{
+    'name': 'record',
+    'expire': 10800,
+    'type': 'A',
+    'content': 'XXX.XXX.XXX.XXX' 
+}
+````
 Its also possible to use environment variables.
 
 ##### Required

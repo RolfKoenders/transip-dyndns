@@ -30,12 +30,13 @@ module.exports = checkDomain;
 async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
     const currentIP = await _checkWanIP();
+    log.debug(`current ip is ${currentIP}`);
 
     const mappedEntries = transIpDomain.dnsEntries
         .map((dnsEntry) => {
 
             const configEntry = configDomain.dnsEntries
-                .find(configEntry => configEntry.name === dnsEntry.name);
+                .find(configEntry => configEntry.name === dnsEntry.name && configEntry.type === dnsEntry.type);
 
             if (configEntry) {
                 const configContent = configEntry.content || currentIP;
