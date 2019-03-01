@@ -23,6 +23,7 @@
     "eslint": "^5.13.0"
   },
   "scripts": {
+    "start": "node index.js | bunyan -o short",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

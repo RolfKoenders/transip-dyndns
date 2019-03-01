@@ -1,8 +1,7 @@
-FROM node:10.15.2-slim
+FROM node:10.15.2
 
 ADD package.json package.json
 RUN npm install
 ADD . .
 
-
-CMD ["node", "index.js"]
+CMD npm run start

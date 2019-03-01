@@ -1,33 +1,67 @@
-# Transip-dyndns
-Keeps a dns record on a [transip](http://www.transip.nl) domain up to date with the current WAN IP.
+# TransIp DynDns 2.0
+This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns).
+Keeps dns entries on [transip](http://www.transip.nl) for one or multiple domains up to date with the current WAN IP (or custom content). 
+
+## Features
+- Update multiple domains and  and their entries
+- Interval (by default every 5m)
+- Docker support
 
 ## Configure :heavy_exclamation_mark:
 In the root folder there is an `config-example.json` file. Save that file as `config.json` and that one will be used. This is the example config:
 
+#### Example
 ```json
 {
   "transip": {
-    "login": "",
-    "privateKeyPath": ""
+    "login": "User",
+    "privateKeyPath": "~/.secrets/private.key"
   },
-  "domain": "",
-  "dnsRecord": "",
-  "logLocation": "./output.log"
+  "domains": [
+       {
+         "domain": "example.net",
+         "dnsEntries": [
+           {
+             "name": "@"
+           },
+           {
+             "name": "A",
+             "content": "XXX.XXX.XXX.XXX"
+           }
+         ]
+       }
+   ],
+  "logLocation": "./data/output.log",
+  "wanCheckURL": "http://icanhazip.com"
 }
 
 ```
 
 Its also possible to use environment variables.
 
-```bash
-# Required
-TRANSIP_LOGIN=<transip-username>
-TRANSIP_PRIVATE_KEY=<path to secrets file (~/.secrets/transip_private_key.key)>
-TRANSIP_DOMAIN=<domain without protocol (example.nl)>
-TRANSIP_DNS_RECORD=<name of the dns record to update>
+##### Required
+```
+TRANSIP_LOGIN=username
+TRANSIP_PRIVATE_KEY=~/.ssh/id_rsa.transip>
+TRANSIP_DOMAINS=[ { "domain": "example.net", "dnsEntries": [ { "name": "@" } ] } ]
+```
 
+##### Optional
+```
 # Optional
+WAN_CHECK_SERVICE_URL=http://icanhazip.com
+DNS_CHECK_INTERVAL=5m
 TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
+```
+
+## NPM
+You could also run it locally
+
+```
+git clone git@github.com:frankforpresident/transip-dyndns.git
+cd transip-dyndns
+npm i
+npm run start
 ```
 
 ## Docker :whale:
@@ -43,7 +77,19 @@ To run the container we need to mount 2 volumes.
 * Directory where the config file :page_facing_up: is stored.
 
 ```
-docker run -t -v /home/<user>/.secrets/transip:/secrets -v /home/<user>/configurations/transip-config/:/config <namespace>/transip-dyndns
+docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:/data frankforpresident/transip-dyndns
+```
+
+### Compose
+
+```
+ dyndns:
+    image: frankforpresident/transip-dyndns
+    container_name: "transip-dyndns"
+    restart: always
+    volumes:
+      - ~/data:/data
+      - ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip
 ```
 
 ### Build

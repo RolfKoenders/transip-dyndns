@@ -27,6 +27,12 @@ const config = convict({
         default: '5m',
         env: 'DNS_CHECK_INTERVAL'
     },
+    wanCheckURL: {
+        doc: 'WAN check service',
+        format: String,
+        default: 'http://icanhazip.com',
+        env: 'WAN_CHECK_SERVICE_URL'
+    },
     domains: {
         doc: 'The domains to update with desired entries',
         format: Array,

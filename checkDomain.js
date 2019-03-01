@@ -10,6 +10,10 @@ const log = bunyan.createLogger({
         {
             level: 'info',
             path: config.get('logLocation')
+        },
+        {
+            level: 'info',
+            stream: process.stdout
         }
     ]
 });
@@ -56,7 +60,7 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
     if (mappedEntries.every(({ changed }) => !changed)) {
         log.info('Nothing changed.');
-        return Promise.resolve('No action needed');
+        return Promise.resolve();
     }
 
     const updatedEntries = mappedEntries.map(({ dnsEntry }) => dnsEntry);

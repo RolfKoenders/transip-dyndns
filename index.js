@@ -5,7 +5,7 @@ const bunyan  = require('bunyan');
 const fs = require('fs');
 const config = require('./config.js');
 const ms = require('ms');
-const interval = require('interval-promise')
+const interval = require('interval-promise');
 
 const log = bunyan.createLogger({
     name: 'transip-dyndns',
@@ -13,6 +13,10 @@ const log = bunyan.createLogger({
         {
             level: 'info',
             path: config.get('logLocation')
+        },
+        {
+            level: 'info',
+            stream: process.stdout
         }
     ]
 });
@@ -66,8 +70,5 @@ async function checkDomains() {
  */
 async function updateDnsRecord(domainName, dnsEntries) {
     return transIpInstance.domainService.setDnsEntries(domainName, { item: dnsEntries })
-        .then(() => {
-            log.info('DNS Entries has been updated.');
-            return Promise.resolve('DNS Record has been updated.');
-        });
+        .then(() => log.info('DNS Entries has been updated.'))
 }
