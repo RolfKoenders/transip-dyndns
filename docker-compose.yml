@@ -1,0 +1,9 @@
+version: '3.4' 
+services:
+  dyndns:
+    image: frankforpresident/transip-dyndns
+    container_name: "transip-dyndns"
+    restart: always
+    volumes:
+      - ./data:/data
+      - ~/.ssh/id_rsa.transip:/secrets/id_rsa.transip
