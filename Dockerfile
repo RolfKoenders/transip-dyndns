@@ -1,7 +1,7 @@
-FROM nodesource/trusty:0.12.0
+FROM node:10.15.2-slim
 
 ADD package.json package.json
 RUN npm install
 ADD . .
 
-CMD ["node", "transip-dyndns.js"]
+CMD ["node", "index.js"]
