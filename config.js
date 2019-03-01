@@ -28,12 +28,16 @@ const config = convict({
         env: 'DNS_CHECK_INTERVAL'
     },
     domains: {
-        doc: 'The domains to update the DNS record of',
+        doc: 'The domains to update with desired entries',
         format: Array,
         default: [
             {
                 domain: null,
-                records: [],
+                dnsEntries: [
+                    {
+                        name: null
+                    }
+                ],
             }
         ],
         env: 'TRANSIP_DOMAINS'

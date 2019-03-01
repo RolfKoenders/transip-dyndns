@@ -33,15 +33,19 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
             const configEntry = configDomain.dnsEntries
                 .find(configEntry => configEntry.name === dnsEntry.name);
 
-            if (configEntry && configEntry.content !== dnsEntry.content) {
-                log.info('Entry changed: ', currentIP);
-                //Merge the current entry with ours
-                const updatedEntry = Object.assign({}, dnsEntry, { content: currentIP });
+            if (configEntry) {
+                const configContent = configEntry.content || currentIP;
 
-                return {
-                    changed: true,
-                    dnsEntry: updatedEntry
-                };
+                if (configContent !== dnsEntry.content) {
+                    log.info('Entry changed: ', currentIP);
+                    //Merge the current entry with ours
+                    const updatedEntry = Object.assign({}, dnsEntry, { content: currentIP });
+
+                    return {
+                        changed: true,
+                        dnsEntry: updatedEntry
+                    };
+                }
             }
 
             return {
