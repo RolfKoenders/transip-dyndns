@@ -2,9 +2,6 @@
 logs
 *.log
 
-#Webstorm
-.idea*
-
 # Runtime data
 pids
 *.pid
@@ -30,4 +27,10 @@ build/Release
 node_modules
 
 # Config file with actual values
-config/config.json
+data/config.json
+
+#Webstorm
+.idea*
+
+#test key
+private.key

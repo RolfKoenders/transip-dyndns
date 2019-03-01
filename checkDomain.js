@@ -33,15 +33,7 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
             const configEntry = configDomain.dnsEntries
                 .find(configEntry => configEntry.name === dnsEntry.name);
 
-            if (configEntry) {
-
-                if (configEntry.content === dnsEntry.content) {
-                    return {
-                        changed: false,
-                        dnsEntry
-                    };
-                }
-
+            if (configEntry && configEntry.content !== dnsEntry.content) {
                 log.info('Entry changed: ', currentIP);
                 //Merge the current entry with ours
                 const updatedEntry = Object.assign({}, dnsEntry, { content: currentIP });
@@ -52,8 +44,10 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
                 };
             }
 
-            log.info(`No entry found with name ${ dnsEntry.name }.`);
-            return Promise.reject(new Error(`No entry found with name ${ dnsEntry.name }.`));
+            return {
+                changed: false,
+                dnsEntry
+            };
         });
 
     if (mappedEntries.every(({ changed }) => !changed)) {
@@ -62,7 +56,7 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
     }
 
     const updatedEntries = mappedEntries.map(({ dnsEntry }) => dnsEntry);
-    return updateDnsEntries(configDomain.name, updatedEntries);
+    return updateDnsEntries(transIpDomain.name, updatedEntries);
 }
 
 /**

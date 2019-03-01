@@ -35,7 +35,8 @@ if (!TRANSIP_PRIVATE_KEY) {
 
 const transIpInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);
 
-interval(checkDomains, ms(DNS_CHECK_INTERVAL));
+return checkDomains()
+    .then(interval(checkDomains, ms(DNS_CHECK_INTERVAL)));
 
 async function checkDomains() {
     log.info('Checking for changes');
@@ -45,9 +46,12 @@ async function checkDomains() {
 
     const domainsToCheck = knownTransIpDomains.filter(domain => configDomainNames.includes(domain));
 
-    const promises = domainsToCheck.map((configDomain) => {
-        return transIpInstance.domainService.getInfo(configDomain.domain)
-            .then((transIpDomain) => checkDomain(configDomain, transIpDomain, updateDnsRecord));
+    const promises = domainsToCheck.map((domainName) => {
+        return transIpInstance.domainService.getInfo(domainName)
+            .then((transIpDomain) => {
+                const configDomain = DOMAINS.find(({ domain }) => domain === domainName);
+                return checkDomain(configDomain, transIpDomain, updateDnsRecord);
+            });
     });
 
     return Promise.all(promises);
