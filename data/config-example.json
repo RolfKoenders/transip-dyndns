@@ -3,7 +3,21 @@
     "login": "",
     "privateKeyPath": ""
   },
-  "domain": "",
-  "dnsRecord": "",
-  "logLocation": "./output.log"
+  "domains": [
+    {
+      "domain": "example.com",
+      "dnsEntries": [
+        {
+          "name": "foo",
+          "expire": 10800,
+          "type": "A"
+        },
+        {
+          "name": "bar"
+        }
+      ]
+    }
+  ],
+  "logLocation": "./data/output.log",
+  "wanCheckURL": "http://icanhazip.com"
 }

@@ -2,84 +2,78 @@
 const request = require('request-promise');
 const Promise = require('bluebird');
 const bunyan  = require('bunyan');
+const config = require('./config.js');
 
-// Setup file logger
 const log = bunyan.createLogger({
     name: 'transip-dyndns',
     streams: [
         {
             level: 'info',
-            path: LOG_LOCATION
+            path: config.get('logLocation')
         }
     ]
 });
 
+module.exports = checkDomain;
 
 /**
  *
- * @param transIp
- * @param domain
+ * @param configDomain
+ * @param transIpDomain
+ * @param updateDnsEntries
+ * @returns
  */
-function checkDomain(transIp, domain) {
+async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
+    const currentIP = await _checkWanIP();
+
+    const mappedEntries = transIpDomain.dnsEntries
+        .map((dnsEntry) => {
+
+            const configEntry = configDomain.dnsEntries
+                .find(configEntry => configEntry.name === dnsEntry.name);
+
+            if (configEntry) {
+
+                if (configEntry.content === dnsEntry.content) {
+                    return {
+                        changed: false,
+                        dnsEntry
+                    };
+                }
+
+                log.info('Entry changed: ', currentIP);
+                //Merge the current entry with ours
+                const updatedEntry = Object.assign({}, dnsEntry, { content: currentIP });
+
+                return {
+                    changed: true,
+                    dnsEntry: updatedEntry
+                };
+            }
+
+            log.info(`No entry found with name ${ dnsEntry.name }.`);
+            return Promise.reject(new Error(`No entry found with name ${ dnsEntry.name }.`));
+        });
+
+    if (mappedEntries.every(({ changed }) => !changed)) {
+        log.info('Nothing changed.');
+        return Promise.resolve('No action needed');
+    }
+
+    const updatedEntries = mappedEntries.map(({ dnsEntry }) => dnsEntry);
+    return updateDnsEntries(configDomain.name, updatedEntries);
 }
 
-
-// return Promise.all([checkCurrentDns(), checkCurrentWanIP()])
-
-// Promise.all()
-//   .spread(function(currentDNSEntries, currentIP) {
-//     _.forEach(currentDNSEntries, function(dnsEntry) {
-//         if(dnsEntry.name === DNS_RECORD) {
-//           if(dnsEntry.content === currentIP) {
-//             log.info('Nothing changed.')
-//           } else {
-//             log.info('WAN Has changed to: ', currentIP);
-//             dnsEntry.content = currentIP;
-//             return updateDnsRecords(currentDNSEntries)
-//               .then(function() {
-//                 log.info('DNS Record has been updated.');
-//               });
-//           }
-//         }
-//     });
-//   })
-//   .catch(function(err) {
-//     // Log error and inform that the check failed.
-//     log.error('Something went wrong: ', err.message);
-//   // })
-
-
-// Get current value of the DNS record on Domain
-function checkCurrentDns() {
-    return new Promise(function(resolve, reject) {
-        return transipInstance.domainService.getDomainNames()
-            .then(function(domains) {
-                _.forEach(domains, function(domain) {
-                    if (domain === DOMAIN) {
-                        return transipInstance.domainService.getInfo(domain)
-                            .then(function(domain) {
-                                const dnsEntries = domain.dnsEntries;
-                                resolve(dnsEntries);
-                            });
-                    }
-                });
-            });
-    });
-}
-
-// Update DNS records
-function updateDnsRecord(currentDNSEntries) {
-    return transipInstance.domainService.setDnsEntries(DOMAIN, {
-        item: currentDNSEntries
-    });
-}
-
-// Retrieve current WAN ip
-function checkCurrentWanIP() {
-    return request('http://icanhazip.com/')
+/**
+ * A basic function that will retrieve the current WAN address
+ * @returns {Promise<T | never>}
+ * @private
+ */
+async function _checkWanIP() {
+    return request(config.get('wanCheckURL'))
         .then((ip) => ip.trim())
         .catch((err) => {
-            throw new Error('Error while loading icanhazip. \n' + err.message);
+            throw new Error('Error while loading url. \n' + err.message);
         });
 }
