@@ -30,7 +30,7 @@ const config = convict({
     dnsCheckInterval: {
         doc: 'Interval that will be use to check the dns records',
         format: String,
-        default: '5m',
+        default: '30m',
         env: 'DNS_CHECK_INTERVAL'
     },
     wanCheckURL: {
