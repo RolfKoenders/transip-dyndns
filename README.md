@@ -1,7 +1,6 @@
 # TransIp Dynamic DNS
-This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns) but actually a complete refactor (including new config stucture).
+This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns) but actually a complete refactor (including new config structure).
 Keeps dns entries on [transip](http://www.transip.nl) for one or multiple domains up to date with the current WAN IP (or custom content). 
-
 
 ## Features :mega:
 - Update multiple domains and  and their entries
