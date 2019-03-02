@@ -10,16 +10,13 @@ const testConfig = {
 const checkDomain = proxyquire
     .noCallThru()
     .load('../checkDomain.js', {
-        './config.js': () => {
-            return {
-                get: (key) => {
-                    return testConfig[key];
-                }
-            };
+        './config.js': {
+            get: (key) => {
+                return testConfig[key];
+            }
         },
         './helpers/checkWanIp.js': () => testIp
     });
-
 
 
 describe('When we have a domain check function', function() {

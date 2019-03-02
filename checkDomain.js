@@ -1,27 +1,10 @@
 #!/usr/bin/env node
 
-const Promise = require('bluebird');
-const bunyan  = require('bunyan');
 const config = require('./config.js');
+const wanCheckServiceURL = config.get('wanCheckURL');
+const logLocation = config.get('logLocation');
+const log = require('./helpers/logger.js')(logLocation);
 const checkWanIp = require('./helpers/checkWanIp.js');
-
-const logLocation = config().get('logLocation');
-const wanCheckServiceURL = config().get('wanCheckURL');
-
-const log = bunyan.createLogger({
-    name: 'transip-dyndns',
-    streams: [
-        {
-            level: 'info',
-            path: logLocation
-        },
-        {
-            level: 'info',
-            stream: process.stdout
-        }
-    ]
-});
-
 
 /**
  *
@@ -33,15 +16,23 @@ const log = bunyan.createLogger({
 module.exports = async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
 
-    if (!configDomain || !transIpDomain) {
+    if (!configDomain) {
+        log.warn('No config domain received. Nothing to change.');
+        return null;
+    }
+
+    if (!transIpDomain) {
+        log.warn('No transIp domain received. Nothing to change.');
         return null;
     }
 
     const currentIP = await checkWanIp(wanCheckServiceURL);
-    log.debug(`current ip is ${currentIP}`);
+    log.debug(`Current ip: ${currentIP}`);
 
     const mappedEntries = transIpDomain.dnsEntries
         .map((dnsEntry) => {
+
+            log.debug(`processing dnsEntry ${dnsEntry} for domain ${transIpDomain.name}`);
 
             const configEntry = configDomain.dnsEntries
                 .find(configEntry => configEntry.name === dnsEntry.name && configEntry.type === dnsEntry.type);

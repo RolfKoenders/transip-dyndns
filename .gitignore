@@ -33,4 +33,4 @@ data/config.json
 .idea*
 
 #test key
-private.key
+secrets/id_rsa.transip

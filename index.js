@@ -1,25 +1,14 @@
 #!/usr/bin/env node
 const Promise = require('bluebird');
 const TransIP = require('transip');
-const bunyan  = require('bunyan');
+
 const fs = require('fs');
 const config = require('./config.js');
+const logLocation = config.get('logLocation');
+const log = require('./helpers/logger.js')(logLocation);
 const ms = require('ms');
 const interval = require('interval-promise');
 
-const log = bunyan.createLogger({
-    name: 'transip-dyndns',
-    streams: [
-        {
-            level: 'info',
-            path: config.get('logLocation')
-        },
-        {
-            level: 'info',
-            stream: process.stdout
-        }
-    ]
-});
 
 // Check for the environment variables
 const TRANSIP_LOGIN = config.get('transip.login');
@@ -42,6 +31,7 @@ return checkDomains()
 
 async function checkDomains() {
     log.info('Checking for changes');
+    const startTime = new Date().getTime();
 
     const configDomainNames = DOMAINS.map(({ domain }) => domain);
     const knownTransIpDomains = await transIpInstance.domainService.getDomainNames();
@@ -53,6 +43,13 @@ async function checkDomains() {
             .then((transIpDomain) => {
                 const configDomain = DOMAINS.find(({ domain }) => domain === domainName);
                 return checkDomain(configDomain, transIpDomain, updateDnsRecord);
+            })
+            .then(() => {
+                const currentTime = new Date().getTime();
+                const processingTime = currentTime - startTime
+                const nextCheck = new Date(currentTime + ms(DNS_CHECK_INTERVAL) - processingTime)
+                log.debug(`Processing time ${processingTime}`);
+                log.info(`Next check will be around ${nextCheck.toISOString()}`);
             });
     });
 
@@ -69,6 +66,7 @@ async function checkDomains() {
 async function updateDnsRecord(domainName, dnsEntries) {
     return transIpInstance.domainService.setDnsEntries(domainName, { item: dnsEntries })
         .catch((error) => {
+            log.error(`Unable to set dns entries for ${domainName}`);
             log.error(error);
             return Promise.reject(error);
         });

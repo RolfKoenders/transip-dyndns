@@ -1,4 +1,5 @@
 const convict = require('convict');
+
 const config = convict({
     transip: {
         login: {
@@ -50,10 +51,10 @@ const config = convict({
 });
 
 try {
-    config.loadFile('data/config.json');
+    config.loadFile('./data/config.json');
 } catch (err) {
     /* eslint-disable no-console */
-    console.error(err);
+    console.error(`No config file found at '/data/config.json'. Please provider one`);
     /* eslint-enable no-console */
     process.exit(1);
 }

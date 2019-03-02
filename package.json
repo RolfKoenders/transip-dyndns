@@ -31,7 +31,6 @@
   },
   "scripts": {
     "start": "node index.js | bunyan -o short",
-    "start:cli": "npm run start | bunyan -o short",
     "lint": "eslint .",
     "test": "mocha",
     "validate": "npm-run-all --parallel test lint"
