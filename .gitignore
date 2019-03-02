@@ -27,4 +27,10 @@ build/Release
 node_modules
 
 # Config file with actual values
-config/config.json
+data/config.json
+
+#Webstorm
+.idea*
+
+#test key
+secrets/id_rsa.transip
