@@ -18,22 +18,24 @@ In the data folder there is an example file call `config-example.json`. rename t
     "login": "User",
     "privateKeyPath": "~/.secrets/private.key"
   },
-  "domains": [
-       {
-         "domain": "example.net",
-         "dnsEntries": [
-           {
-             "name": "@",
-             "type": "a"
-           },
-           {
-             "name": "prefix",
-             "type": "cname",
-             "content": "@"
-           }
+  "domainsToCheck": {
+      "domains": [
+             {
+               "domain": "example.net",
+               "dnsEntries": [
+                 {
+                   "name": "@",
+                   "type": "a"
+                 },
+                 {
+                   "name": "prefix",
+                   "type": "cname",
+                   "content": "@"
+                 }
+               ]
+             }
          ]
-       }
-   ],
+  },
   "logLevel": "info",
   "dnsCheckInterval": "30m"
 }

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const config = require('./config.js');
 const wanCheckServiceURL = config.get('wanCheckURL');
 const logLocation = config.get('logLocation');
@@ -40,12 +38,12 @@ module.exports = async function checkDomain(configDomain, transIpDomain, updateD
                 .find(configEntry => configEntry.name === dnsEntry.name && configEntry.type === dnsEntry.type);
 
             if (configEntry) {
-                const configContent = configEntry.content || currentIP;
+                const content = configEntry.content || currentIP;
 
-                if (configContent !== dnsEntry.content) {
+                if (content !== dnsEntry.content) {
                     log.info('Entry changed: ', currentIP);
                     //Merge the current entry with ours
-                    const updatedEntry = Object.assign({}, dnsEntry, { content: currentIP });
+                    const updatedEntry = Object.assign({}, dnsEntry, { content });
 
                     return {
                         changed: true,

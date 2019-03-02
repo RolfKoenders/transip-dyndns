@@ -39,20 +39,22 @@ const config = convict({
         default: 'http://icanhazip.com',
         env: 'WAN_CHECK_SERVICE_URL'
     },
-    domains: {
+    domainsToCheck: {
         doc: 'The domains to update with desired entries',
-        format: Array,
-        default: [
-            {
-                domain: null,
-                dnsEntries: [
-                    {
-                        name: null
-                    }
-                ],
-            }
-        ],
-        env: 'TRANSIP_DOMAINS'
+        format: Object,
+        default: {
+            domains: [
+                {
+                    domain: null,
+                    dnsEntries: [
+                        {
+                            name: null
+                        }
+                    ],
+                }
+            ]
+        },
+        env: 'DOMAINS_TO_CHECK'
     },
 });
 

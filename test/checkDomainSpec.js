@@ -57,6 +57,41 @@ describe('When we have a domain check function', function() {
             }
         },
         {
+            name: 'When we have custom content',
+            configDomain: {
+                name: 'example.com',
+                dnsEntries: [
+                    {
+                        name: '@',
+                        type: 'A',
+                        content: '111.111.111.111'
+                    }
+                ]
+            },
+            transIpDomain: {
+                name: 'example.com',
+                dnsEntries: [
+                    {
+                        name: '@',
+                        type: 'A',
+                        expire: testExpire,
+                        content: testIp
+                    }
+                ]
+            },
+            expectedOutput: {
+                name: 'example.com',
+                dnsEntries: [
+                    {
+                        name: '@',
+                        type: 'A',
+                        expire: testExpire,
+                        content: '111.111.111.111'
+                    }
+                ]
+            }
+        },
+        {
             name: 'When we have type provider, we don\'t have an update',
             configDomain: {
                 name: 'example.com',
