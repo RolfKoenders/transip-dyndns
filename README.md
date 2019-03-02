@@ -29,7 +29,7 @@ In the data folder there is an example file call `config-example.json`. rename t
                  },
                  {
                    "name": "prefix",
-                   "type": "cname",
+                   "type": "CNAME",
                    "content": "@"
                  }
                ]
