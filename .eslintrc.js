@@ -15,6 +15,9 @@ module.exports = {
     },
     overrides: [
         {
+            plugins: [
+                "mocha"
+            ],
             files: [ '**/*Spec.js' ],
             rules: {
                 'mocha/no-exclusive-tests': [

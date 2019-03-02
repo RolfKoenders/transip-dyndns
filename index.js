@@ -68,5 +68,8 @@ async function checkDomains() {
  */
 async function updateDnsRecord(domainName, dnsEntries) {
     return transIpInstance.domainService.setDnsEntries(domainName, { item: dnsEntries })
-        .then(() => log.info('DNS Entries has been updated.'))
+        .catch((error) => {
+            log.error(error);
+            return Promise.reject(error);
+        });
 }

@@ -1,5 +1,4 @@
 const convict = require('convict');
-
 const config = convict({
     transip: {
         login: {
@@ -50,7 +49,15 @@ const config = convict({
     },
 });
 
-config.loadFile('data/config.json');
+try {
+    config.loadFile('data/config.json');
+} catch (err) {
+    /* eslint-disable no-console */
+    console.error(err);
+    /* eslint-enable no-console */
+    process.exit(1);
+}
+
 config.validate({ allowed: 'strict' });
 
 module.exports = config;

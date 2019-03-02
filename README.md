@@ -40,13 +40,13 @@ In the root folder there is an `config-example.json` file. Save that file as `co
 ```
 
 ##### dnsEntry attributes
-````json
-{
-    'name': 'record',
-    'expire': 10800,
-    'type': 'A',
-    'content': 'XXX.XXX.XXX.XXX' 
-}
+````
+
+name { String } (required)
+type { String } (required)
+content { String } (optional)
+expire { Number } (optional)
+
 ````
 Its also possible to use environment variables.
 

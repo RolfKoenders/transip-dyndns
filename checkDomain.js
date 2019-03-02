@@ -1,15 +1,19 @@
 #!/usr/bin/env node
-const request = require('request-promise');
+
 const Promise = require('bluebird');
 const bunyan  = require('bunyan');
 const config = require('./config.js');
+const checkWanIp = require('./helpers/checkWanIp.js');
+
+const logLocation = config().get('logLocation');
+const wanCheckServiceURL = config().get('wanCheckURL');
 
 const log = bunyan.createLogger({
     name: 'transip-dyndns',
     streams: [
         {
             level: 'info',
-            path: config.get('logLocation')
+            path: logLocation
         },
         {
             level: 'info',
@@ -18,7 +22,6 @@ const log = bunyan.createLogger({
     ]
 });
 
-module.exports = checkDomain;
 
 /**
  *
@@ -27,9 +30,14 @@ module.exports = checkDomain;
  * @param updateDnsEntries
  * @returns
  */
-async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
+module.exports = async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
-    const currentIP = await _checkWanIP();
+
+    if (!configDomain || !transIpDomain) {
+        return null;
+    }
+
+    const currentIP = await checkWanIp(wanCheckServiceURL);
     log.debug(`current ip is ${currentIP}`);
 
     const mappedEntries = transIpDomain.dnsEntries
@@ -61,22 +69,10 @@ async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 
     if (mappedEntries.every(({ changed }) => !changed)) {
         log.info('Nothing changed.');
-        return Promise.resolve();
+        return null;
     }
 
     const updatedEntries = mappedEntries.map(({ dnsEntry }) => dnsEntry);
     return updateDnsEntries(transIpDomain.name, updatedEntries);
-}
+};
 
-/**
- * A basic function that will retrieve the current WAN address
- * @returns {Promise<T | never>}
- * @private
- */
-async function _checkWanIP() {
-    return request(config.get('wanCheckURL'))
-        .then((ip) => ip.trim())
-        .catch((err) => {
-            throw new Error('Error while loading url. \n' + err.message);
-        });
-}
