@@ -76,17 +76,17 @@ TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
 You could also run it locally
 
 ```
-git clone git@github.com:frankforpresident/transip-dyndns.git
-cd transip-dyndns
+git clone git@github.com:frankforpresident/transip-dynamic-dns.git
+cd transip-dynamic-dns
 npm i
 npm run start
 ```
 
 ## Docker :whale:
-Also available as a [docker image](https://hub.docker.com/r/frankforpresident/transip-dyndns/).
+Also available as a [docker image](https://hub.docker.com/r/frankforpresident/transip-dynamic-dns/).
 
 ```
-docker pull frankforpresident/transip-dyndns
+docker pull frankforpresident/transip-dynamic-dns
 ```
 
 #### Run
@@ -95,15 +95,15 @@ To run the container we need to mount 2 volumes.
 * Directory where the config file :page_facing_up: is stored.
 
 ```
-docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:/data frankforpresident/transip-dyndns
+docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:/data frankforpresident/transip-dynamic-dns
 ```
 
 #### Compose
 
 ```
  dyndns:
-    image: frankforpresident/transip-dyndns
-    container_name: "transip-dyndns"
+    image: frankforpresident/transip-dynamic-dns
+    container_name: "transip-dynamic-dns"
     restart: always
     volumes:
       - ~/data:/data
@@ -113,5 +113,5 @@ docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:
 #### Build
 If you want to build the image yourself:
 ```
-docker build -t <namespace>/transip-dyndns .
+docker build -t <namespace>/transip-dynamic-dns .
 ```
