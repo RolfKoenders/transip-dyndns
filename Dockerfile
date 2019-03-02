@@ -1,7 +1,12 @@
-FROM node:10.15.2
+FROM tarampampam/node:11-alpine
 
 ADD package.json package.json
-RUN npm install
+
+RUN apk add --no-cache make gcc g++ python && \
+    npm install --prod && \
+    npm cache clean --force && \
+    apk del make gcc g++ python 
+
 ADD . .
 
 CMD npm run start
