@@ -16,7 +16,7 @@ In the data folder there is an example file call `config-example.json`. rename t
 {
   "transip": {
     "login": "User",
-    "privateKeyPath": "~/.secrets/private.key"
+    "privateKeyPath": "/secrets/private.key"
   },
   "domainsToCheck": {
       "domains": [
@@ -61,7 +61,7 @@ Its also possible to use environment variables.
 ##### Required *(When no config file used)*
 ```
 TRANSIP_LOGIN=username
-TRANSIP_PRIVATE_KEY=~/.secrets/id_rsa.transip>
+TRANSIP_PRIVATE_KEY=/secrets/id_rsa.transip>
 DOMAINS_TO_CHECK={ "domains": [ { "domain": "example.net", "dnsEntries": [ { "name": "@", "type": "AAAA", "content": "1.2.3.4" } ] } ] }
 ```
 
@@ -88,7 +88,7 @@ npm run start
 Also available as a [docker image](https://hub.docker.com/r/frankforpresident/transip-dynamic-dns/).
 
 ```
-docker pull frankforpresident/transip-dynamic-dns
+docker pull frankforpresident/transip-dynamic-dns:latest
 ```
 
 #### Run
@@ -97,7 +97,7 @@ To run the container we need to mount 2 volumes.
 * Directory where the config file :page_facing_up: is stored.
 
 ```
-docker run -t -v ~/.secrets/private.key:/secrets/private.key:ro -v ~/data:/data frankforpresident/transip-dynamic-dns
+docker run -t -v ~/.secrets/private.key:/secrets/private.key:ro -v ~/transip-dynamic-dns/data:/data ~/transip-dynamic-dns/log/output.log:/log/output.log frankforpresident/transip-dynamic-dns
 ```
 
 #### Compose
@@ -111,10 +111,4 @@ docker run -t -v ~/.secrets/private.key:/secrets/private.key:ro -v ~/data:/data 
       - ~/transip-dynamic-dns/data:/data
       - ~/transip-dynamic-dns/log/output.log:/log/output.log
       - ~/.secrets/private.key:/secrets/private.key:ro
-```
-
-#### Build
-If you want to build the image yourself:
-```
-docker build -t <namespace>/transip-dynamic-dns .
 ```
