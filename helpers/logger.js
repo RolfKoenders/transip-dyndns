@@ -1,15 +1,15 @@
 const bunyan  = require('bunyan');
 
-module.exports = function (path) {
+module.exports = function(path, level = 'info') {
     return bunyan.createLogger({
-        name: 'transip-dyndns',
+        name: '[ TransIp Dynamic DNS ]',
         streams: [
             {
-                level: 'info',
+                level,
                 path
             },
             {
-                level: 'info',
+                level,
                 stream: process.stdout
             }
         ]

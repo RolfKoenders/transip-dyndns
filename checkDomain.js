@@ -3,7 +3,8 @@
 const config = require('./config.js');
 const wanCheckServiceURL = config.get('wanCheckURL');
 const logLocation = config.get('logLocation');
-const log = require('./helpers/logger.js')(logLocation);
+const logLevel = config.get('logLevel');
+const log = require('./helpers/logger.js')(logLocation, logLevel);
 const checkWanIp = require('./helpers/checkWanIp.js');
 
 /**
@@ -27,12 +28,12 @@ module.exports = async function checkDomain(configDomain, transIpDomain, updateD
     }
 
     const currentIP = await checkWanIp(wanCheckServiceURL);
-    log.debug(`Current ip: ${currentIP}`);
+    log.info(`Current ip: ${currentIP}`);
 
     const mappedEntries = transIpDomain.dnsEntries
         .map((dnsEntry) => {
 
-            log.debug(`processing dnsEntry ${dnsEntry} for domain ${transIpDomain.name}`);
+            log.debug(`processing dnsEntry ${JSON.stringify(dnsEntry)} for domain ${transIpDomain.name}`);
 
             const configEntry = configDomain.dnsEntries
                 .find(configEntry => configEntry.name === dnsEntry.name && configEntry.type === dnsEntry.type);

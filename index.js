@@ -5,7 +5,8 @@ const TransIP = require('transip');
 const fs = require('fs');
 const config = require('./config.js');
 const logLocation = config.get('logLocation');
-const log = require('./helpers/logger.js')(logLocation);
+const logLevel = config.get('logLevel');
+const log = require('./helpers/logger.js')(logLocation, logLevel);
 const ms = require('ms');
 const interval = require('interval-promise');
 
@@ -13,8 +14,9 @@ const interval = require('interval-promise');
 // Check for the environment variables
 const TRANSIP_LOGIN = config.get('transip.login');
 const PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
-const DOMAINS = config.get('domains');
+const DOMAINS_TO_CHECK = config.get('domains');
 const DNS_CHECK_INTERVAL = config.get('dnsCheckInterval');
+
 const checkDomain = require('./checkDomain.js');
 
 // Load privateKeyFile contents
@@ -33,7 +35,7 @@ async function checkDomains() {
     log.info('Checking for changes');
     const startTime = new Date().getTime();
 
-    const configDomainNames = DOMAINS.map(({ domain }) => domain);
+    const configDomainNames = DOMAINS_TO_CHECK.map(({ domain }) => domain);
     const knownTransIpDomains = await transIpInstance.domainService.getDomainNames();
 
     const domainsToCheck = knownTransIpDomains.filter(domain => configDomainNames.includes(domain));
@@ -41,7 +43,7 @@ async function checkDomains() {
     const promises = domainsToCheck.map((domainName) => {
         return transIpInstance.domainService.getInfo(domainName)
             .then((transIpDomain) => {
-                const configDomain = DOMAINS.find(({ domain }) => domain === domainName);
+                const configDomain = DOMAINS_TO_CHECK.find(({ domain }) => domain === domainName);
                 return checkDomain(configDomain, transIpDomain, updateDnsRecord);
             })
             .then(() => {

@@ -21,6 +21,12 @@ const config = convict({
         default: './output.log',
         env: 'TRANSIP_LOG_LOCATION'
     },
+    logLevel: {
+        doc: 'Log level',
+        format: String,
+        default: 'info',
+        env: 'LOG_LEVEL'
+    },
     dnsCheckInterval: {
         doc: 'Interval that will be use to check the dns records',
         format: String,

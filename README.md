@@ -1,14 +1,15 @@
-# TransIp DynDns 2.0
-This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns).
+# TransIp Dynamic DNS
+This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns) but actually a complete refactor.
 Keeps dns entries on [transip](http://www.transip.nl) for one or multiple domains up to date with the current WAN IP (or custom content). 
 
-## Features
+## Features :megaphone:
 - Update multiple domains and  and their entries
 - Interval (by default every 5m)
+- Improved logging
 - Docker support
 
 ## Configure :heavy_exclamation_mark:
-In the root folder there is an `config-example.json` file. Save that file as `config.json` and that one will be used. This is the example config:
+In the data folder there is an example file call `config-example.json`. rename that file as `config.json` and configure it as below demonstrated. 
 
 #### Example
 ```json
@@ -23,7 +24,7 @@ In the root folder there is an `config-example.json` file. Save that file as `co
          "dnsEntries": [
            {
              "name": "@",
-             "type": "a",
+             "type": "a"
            },
            {
              "name": "prefix",
@@ -38,6 +39,7 @@ In the root folder there is an `config-example.json` file. Save that file as `co
 }
 
 ```
+Note: every dnsEntry needs to **contain** at least a **name and type**.
 
 ##### dnsEntry attributes
 ````
@@ -48,12 +50,16 @@ content { String } (optional)
 expire { Number } (optional)
 
 ````
+More info [here](https://www.npmjs.com/package/transip#transipinstancedomainservicesetdnsentries)
+
+###Environment variables
+
 Its also possible to use environment variables.
 
 ##### Required
 ```
 TRANSIP_LOGIN=username
-TRANSIP_PRIVATE_KEY=~/.ssh/id_rsa.transip>
+TRANSIP_PRIVATE_KEY=~/.secrets/id_rsa.transip>
 TRANSIP_DOMAINS=[ { "domain": "example.net", "dnsEntries": [ { "name": "@" } ] } ]
 ```
 
@@ -76,13 +82,13 @@ npm run start
 ```
 
 ## Docker :whale:
-There is a [docker image](https://hub.docker.com/r/rolfkoenders/transip-dyndns/) for the hipsters who want to run everything with docker.
+Also available as a [docker image](https://hub.docker.com/r/frankforpresident/transip-dyndns/).
 
 ```
-docker pull rolfkoenders/transip-dyndns
+docker pull frankforpresident/transip-dyndns
 ```
 
-### Run
+#### Run
 To run the container we need to mount 2 volumes.
 * Directory where the privateKey :key: can be found.
 * Directory where the config file :page_facing_up: is stored.
@@ -91,7 +97,7 @@ To run the container we need to mount 2 volumes.
 docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:/data frankforpresident/transip-dyndns
 ```
 
-### Compose
+#### Compose
 
 ```
  dyndns:
@@ -103,7 +109,7 @@ docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:
       - ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip
 ```
 
-### Build
+#### Build
 If you want to build the image yourself:
 ```
 docker build -t <namespace>/transip-dyndns .
