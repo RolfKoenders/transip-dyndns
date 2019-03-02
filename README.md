@@ -25,7 +25,7 @@ In the data folder there is an example file call `config-example.json`. rename t
                "dnsEntries": [
                  {
                    "name": "@",
-                   "type": "a"
+                   "type": "A"
                  },
                  {
                    "name": "prefix",
@@ -54,11 +54,11 @@ expire { Number } (optional)
 ````
 More info [here](https://www.npmjs.com/package/transip#transipinstancedomainservicesetdnsentries)
 
-### Environment variables
+### Environment variables *(optional, when no config file used)*
 
 Its also possible to use environment variables.
 
-##### Required *(When no config file used)*
+##### Required
 ```
 TRANSIP_LOGIN=username
 TRANSIP_PRIVATE_KEY=/secrets/id_rsa.transip>
