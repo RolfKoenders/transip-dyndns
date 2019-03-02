@@ -97,7 +97,7 @@ To run the container we need to mount 2 volumes.
 * Directory where the config file :page_facing_up: is stored.
 
 ```
-docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:/data frankforpresident/transip-dynamic-dns
+docker run -t -v ~/.secrets/private.key:/secrets/private.key:ro -v ~/data:/data frankforpresident/transip-dynamic-dns
 ```
 
 #### Compose
@@ -108,8 +108,9 @@ docker run -t -v ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip:ro -v ~/data:
     container_name: "transip-dynamic-dns"
     restart: always
     volumes:
-      - ~/data:/data
-      - ~/.secrets/id_rsa.transip:/secrets/id_rsa.transip
+      - ~/transip-dynamic-dns/data:/data
+      - ~/transip-dynamic-dns/log/output.log:/log/output.log
+      - ~/.secrets/private.key:/secrets/private.key:ro
 ```
 
 #### Build
