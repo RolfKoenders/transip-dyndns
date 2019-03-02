@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-const Promise = require('bluebird');
 const TransIP = require('transip');
-
 const fs = require('fs');
 const config = require('./config.js');
 const logLocation = config.get('logLocation');
@@ -11,7 +9,6 @@ const ms = require('ms');
 const interval = require('interval-promise');
 
 
-// Check for the environment variables
 const TRANSIP_LOGIN = config.get('transip.login');
 const PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
 const DOMAINS_TO_CHECK = config.get('domains');
@@ -21,8 +18,9 @@ const checkDomain = require('./checkDomain.js');
 
 // Load privateKeyFile contents
 const TRANSIP_PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_LOCATION, { encoding: 'utf-8' });
+
 if (!TRANSIP_PRIVATE_KEY) {
-    log.error('PrivateKey cannot be read.');
+    log.error(`PrivateKey cannot be read. Please check the location (${PRIVATE_KEY_LOCATION})`);
     process.exit(1);
 }
 
@@ -48,8 +46,8 @@ async function checkDomains() {
             })
             .then(() => {
                 const currentTime = new Date().getTime();
-                const processingTime = currentTime - startTime
-                const nextCheck = new Date(currentTime + ms(DNS_CHECK_INTERVAL) - processingTime)
+                const processingTime = currentTime - startTime;
+                const nextCheck = new Date(currentTime + ms(DNS_CHECK_INTERVAL) - processingTime);
                 log.debug(`Processing time ${processingTime}`);
                 log.info(`Next check will be around ${nextCheck.toISOString()}`);
             });
@@ -61,9 +59,9 @@ async function checkDomains() {
 /**
  * Will update the dns entries
  * @Note: Please note that this function will replace all DNS entries
- * @param domainName
- * @param dnsEntries
- * @returns {Promise<T | never>}
+ * @param {string} domainName - domain name
+ * @param {array} dnsEntries - updated entries
+ * @returns {Promise<T | never>} - true
  */
 async function updateDnsRecord(domainName, dnsEntries) {
     return transIpInstance.domainService.setDnsEntries(domainName, { item: dnsEntries })

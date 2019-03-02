@@ -1,4 +1,4 @@
-const bunyan  = require('bunyan');
+const bunyan = require('bunyan');
 
 module.exports = function(path, level = 'info') {
     return bunyan.createLogger({

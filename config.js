@@ -18,7 +18,7 @@ const config = convict({
     logLocation: {
         doc: 'Path to create the log file',
         format: String,
-        default: './output.log',
+        default: './data/output.log',
         env: 'TRANSIP_LOG_LOCATION'
     },
     logLevel: {

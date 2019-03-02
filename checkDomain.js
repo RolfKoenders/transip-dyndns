@@ -8,11 +8,12 @@ const log = require('./helpers/logger.js')(logLocation, logLevel);
 const checkWanIp = require('./helpers/checkWanIp.js');
 
 /**
+ * Main function to update a domain and its entries
  *
- * @param configDomain
- * @param transIpDomain
- * @param updateDnsEntries
- * @returns
+ * @param {object} configDomain - domain object from config
+ * @param {object} transIpDomain - domain object from transIp
+ * @param {function} updateDnsEntries - callback function to update entry
+ * @returns {Promise} *
  */
 module.exports = async function checkDomain(configDomain, transIpDomain, updateDnsEntries) {
 

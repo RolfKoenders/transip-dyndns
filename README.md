@@ -35,8 +35,8 @@ In the data folder there is an example file call `config-example.json`. rename t
          ]
        }
    ],
-  "logLocation": "./data/output.log",
-  "wanCheckURL": "http://icanhazip.com"
+  "logLevel": "info",
+  "dnsCheckInterval": "30m"
 }
 
 ```
