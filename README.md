@@ -54,23 +54,24 @@ expire { Number } (optional)
 ````
 More info [here](https://www.npmjs.com/package/transip#transipinstancedomainservicesetdnsentries)
 
-###Environment variables
+### Environment variables
 
 Its also possible to use environment variables.
 
-##### Required
+##### Required *(When no config file used)*
 ```
 TRANSIP_LOGIN=username
 TRANSIP_PRIVATE_KEY=~/.secrets/id_rsa.transip>
-TRANSIP_DOMAINS=[ { "domain": "example.net", "dnsEntries": [ { "name": "@" } ] } ]
+DOMAINS_TO_CHECK={ "domains": [ { "domain": "example.net", "dnsEntries": [ { "name": "@", "type": "AAAA", "content": "1.2.3.4" } ] } ] }
 ```
 
 ##### Optional
 ```
 # Optional
-WAN_CHECK_SERVICE_URL=http://icanhazip.com
+WAN_CHECK_SERVICE_URL=https://api.ipify.org
 DNS_CHECK_INTERVAL=5m
-TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
+LOG_LOCATION=/log/output.log
+LOG_LEVEL=debug
 ```
 
 ## NPM
@@ -79,7 +80,7 @@ You could also run it locally
 ```
 git clone git@github.com:frankforpresident/transip-dynamic-dns.git
 cd transip-dynamic-dns
-npm i
+npm install --prod
 npm run start
 ```
 

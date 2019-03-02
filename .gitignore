@@ -34,3 +34,4 @@ data/config.json
 
 #test key
 secrets/id_rsa.transip
+private.key
