@@ -41,7 +41,12 @@ async function checkDomains() {
     const configDomainNames = DOMAINS_TO_CHECK.domains
         .map(({ domain }) => domain);
 
-    const knownTransIpDomains = await transIpInstance.domainService.getDomainNames();
+    const knownTransIpDomains = await transIpInstance.domainService.getDomainNames()
+        .catch((error) => {
+            log.error(`Unable to connect to transIP. Please verify account and private key`);
+            log.error(error);
+            process.exit(1);
+        })
 
     const domainsToCheck = knownTransIpDomains.filter(domain => configDomainNames.includes(domain));
 
