@@ -1,4 +1,4 @@
-FROM tarampampam/node:11-alpine
+FROM tarampampam/node:11.10-alpine
 
 ADD package.json package.json
 
