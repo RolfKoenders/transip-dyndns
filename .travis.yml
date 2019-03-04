@@ -3,4 +3,4 @@ node_js:
   - "node"
   - "8.11.3"
 
-script: validate
+script: npm run validate
