@@ -1,4 +1,9 @@
 # TransIp Dynamic DNS
+[![Build Status](https://travis-ci.com/frankforpresident/transip-dynamic-dns.svg?branch=master)](https://travis-ci.com/frankforpresident/transip-dynamic-dns)
+![Docker Pulls](https://img.shields.io/docker/pulls/frankforpresident/transip-dynamic-dns.svg)
+![GitHub repo size in bytes](https://img.shields.io/github/repo-size/frankforpresident/transip-dynamic-dns.svg)
+![GitHub release](https://img.shields.io/github/release/frankforpresident/transip-dynamic-dns.svg)
+
 This repo is a fork from [transip-dyndns](https://github.com/RolfKoenders/transip-dyndns) but actually a complete refactor (including new config structure).
 Keeps dns entries on [transip](http://www.transip.nl) for one or multiple domains up to date with the current WAN IP (or custom content). 
 
