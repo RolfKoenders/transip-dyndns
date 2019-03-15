@@ -28,18 +28,12 @@ var conf = convict({
     default: null,
     env: 'TRANSIP_DNS_RECORD'
   },
-  logLocation: {
-    doc: 'Path to create the log file',
-    format: String,
-    default: './output.log',
-    env: 'TRANSIP_LOG_LOCATION'
-  }
 });
 
 // Ugly part about loading config.
 // Check if there is a local config
 try {
-  conf.loadFile('./config-example.json');
+  conf.loadFile('./config/config.json');
 } catch(err) {}
 
 // If we run with docker we want to link a config folder.
