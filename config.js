@@ -28,12 +28,6 @@ var conf = convict({
     default: null,
     env: 'TRANSIP_DNS_RECORD'
   },
-  logLocation: {
-    doc: 'Path to create the log file',
-    format: String,
-    default: './output.log',
-    env: 'TRANSIP_LOG_LOCATION'
-  }
 });
 
 // Ugly part about loading config.

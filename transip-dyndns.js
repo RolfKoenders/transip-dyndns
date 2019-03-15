@@ -18,7 +18,6 @@ var TRANSIP_LOGIN = config.get('transip.login');
 var PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
 var DOMAIN = config.get('domain');
 var DNS_RECORD = config.get('dnsRecord');
-var LOG_LOCATION = config.get('logLocation');
 
 // Load privateKeyFile contents
 var TRANSIP_PRIVATE_KEY;
