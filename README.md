@@ -1,23 +1,37 @@
 # Transip-dyndns
+
 Keeps a dns record on a [transip](http://www.transip.nl) domain up to date with the current WAN IP.
 
-## Configure :heavy_exclamation_mark:
-In the root folder there is an `config-example.json` file. Save that file as `config.json` and that one will be used. This is the example config:
+## Quick start
 
-```json
-{
-  "transip": {
-    "login": "",
-    "privateKeyPath": ""
-  },
-  "domain": "",
-  "dnsRecord": "",
-  "logLocation": "./output.log"
-}
+1. Configure the project
+2. Run `npm install`
+3. Run `node transip-dyndns`
+4. Profit
+
+## Configure
+
+### JSON
+
+Copy `config/config-example.json` to `config/config.json`.
+
+Example config:
 
 ```
+{
+  "transip": {
+    "login": "",            > Your transip username
+    "privateKeyPath": ""    > Path to your transip private api key file
+  },
+  "domain": "",             > The name of your transip domain (example.com)
+  "dnsRecord": "",          > The name of your transip dns record you want to update
+  "logLocation": "./output.log"
+}
+```
 
-Its also possible to use environment variables.
+### BASH
+
+It's also possible to use environment variables.
 
 ```bash
 # Required
@@ -30,24 +44,6 @@ TRANSIP_DNS_RECORD=<name of the dns record to update>
 TRANSIP_LOG_LOCATION=<path to output log file> (default: ./output.log)
 ```
 
-## Docker :whale:
-There is a [docker image](https://hub.docker.com/r/rolfkoenders/transip-dyndns/) for the hipsters who want to run everything with docker.
+## Docker
 
-```
-docker pull rolfkoenders/transip-dyndns
-```
-
-### Run
-To run the container we need to mount 2 volumes.
-* Directory where the privateKey :key: can be found.
-* Directory where the config file :page_facing_up: is stored.
-
-```
-docker run -t -v /home/<user>/.secrets/transip:/secrets -v /home/<user>/configurations/transip-config/:/config <namespace>/transip-dyndns
-```
-
-### Build
-If you want to build the image yourself:
-```
-docker build -t <namespace>/transip-dyndns .
-```
+This fork does **not** support the Docker image. Please see [RolfKoenders/transip-dyndns](https://github.com/RolfKoenders/transip-dyndns) if you want to use that.
