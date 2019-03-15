@@ -27,4 +27,5 @@ build/Release
 node_modules
 
 # Config file with actual values
+config.json
 config/config.json
