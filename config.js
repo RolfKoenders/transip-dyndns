@@ -39,7 +39,7 @@ var conf = convict({
 // Ugly part about loading config.
 // Check if there is a local config
 try {
-  conf.loadFile('./config.json');
+  conf.loadFile('./config/config.json');
 } catch(err) {}
 
 // If we run with docker we want to link a config folder.
