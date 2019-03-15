@@ -30,7 +30,7 @@ var log = bunyan.createLogger({
       path: LOG_LOCATION
     }
   ]
-})
+});
 
 // Create TRANSIP Instance
 var transipInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);
