@@ -4,15 +4,14 @@
 // Require
 
 var TransIP = require('transip'),
-    request = require('request-promise'),
     Promise = require('bluebird'),
-    bunyan  = require('bunyan'),
+    request = require('request-promise'),
     fs      = require('fs'),
     _       = require('lodash'),
     config  = require('./config.js');
 
 // ================================
-// Constants / Config
+// Globals
 
 // Check for the environment variables
 var TRANSIP_LOGIN = config.get('transip.login');
@@ -20,6 +19,20 @@ var PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
 var DOMAIN = config.get('domain');
 var DNS_RECORD = config.get('dnsRecord');
 var LOG_LOCATION = config.get('logLocation');
+
+// Load privateKeyFile contents
+var TRANSIP_PRIVATE_KEY;
+try {
+  TRANSIP_PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_LOCATION, {encoding:'utf-8'});
+}
+catch(err) {}
+if(!TRANSIP_PRIVATE_KEY) {
+  console.log('PrivateKey cannot be read:', PRIVATE_KEY_LOCATION);
+  process.exit(1);
+}
+
+// Create TRANSIP Instance
+var transipInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);
 
 // ================================
 // Main
@@ -29,31 +42,6 @@ var LOG_LOCATION = config.get('logLocation');
  * @return {Promise}
  */
 function main() {
-
-  // Load privateKeyFile contents
-  var TRANSIP_PRIVATE_KEY;
-  try {
-    TRANSIP_PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_LOCATION, {encoding:'utf-8'});
-  }
-  catch(err) {}
-  if(!TRANSIP_PRIVATE_KEY) {
-    console.log('PrivateKey cannot be read:', PRIVATE_KEY_LOCATION);
-    process.exit(1);
-  }
-
-  // Setup file logger
-  var log = bunyan.createLogger({
-    name: 'transip-dyndns',
-    streams: [
-      {
-        level: 'info',
-        path: LOG_LOCATION
-      }
-    ]
-  });
-
-  // Create TRANSIP Instance
-  var transipInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);
 
   // Get current dns entries, WAN IP
   return Promise.all([checkCurrentDns(), checkCurrentWanIP()])
@@ -71,16 +59,16 @@ function main() {
 
         // Update if changed
         if(dnsEntry.content === currentIP) {
-          log.info('Nothing changed.');
+          console.info('Nothing changed.');
         }
         else {
 
-          log.info('WAN has changed to:', currentIP);
+          console.info('WAN has changed to:', currentIP);
           dnsEntry.content = currentIP;
 
           return updateDnsRecords(currentDNSEntries)
           .then(function() {
-            log.info('DNS record has been updated.');
+            console.info('DNS record has been updated.');
           });
 
         }
@@ -90,13 +78,13 @@ function main() {
 
     // Check some things
     if (!foundDNS) {
-      log.warn('No DNS_RECORD found for "'+ DNS_RECORD +'"');
+      console.warn('No DNS_RECORD found for "'+ DNS_RECORD +'"');
     }
 
   })
   .catch(function(err) {
     // Log error and inform that the check failed.
-    log.error('Something went wrong:', err.message);
+    console.error('Something went wrong:', err.message);
   });
 
 }
