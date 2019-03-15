@@ -12,7 +12,7 @@
     "lodash": "^3.10.1",
     "request": "^2.67.0",
     "request-promise": "^1.0.2",
-    "transip": "^0.0.4"
+    "transip": "^0.0.6"
   },
   "devDependencies": {},
   "scripts": {
