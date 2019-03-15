@@ -15,9 +15,13 @@ var DNS_RECORD = config.get('dnsRecord');
 var LOG_LOCATION = config.get('logLocation');
 
 // Load privateKeyFile contents
-var TRANSIP_PRIVATE_KEY= fs.readFileSync(PRIVATE_KEY_LOCATION, {encoding:'utf-8'});
+var TRANSIP_PRIVATE_KEY;
+try {
+  TRANSIP_PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_LOCATION, {encoding:'utf-8'});
+}
+catch(err) {}
 if(!TRANSIP_PRIVATE_KEY) {
-  console.log('PrivateKey cannot be read.');
+  console.log('PrivateKey cannot be read:', PRIVATE_KEY_LOCATION);
   process.exit(1);
 }
 
