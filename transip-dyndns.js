@@ -8,7 +8,7 @@ var TransIP = require('transip'),
     config  = require('./config.js');
 
 // Check for the environment variables
-var TRANSIP_LOGIN = config.get('transip.login')
+var TRANSIP_LOGIN = config.get('transip.login');
 var PRIVATE_KEY_LOCATION = config.get('transip.privateKeyPath');
 var DOMAIN = config.get('domain');
 var DNS_RECORD = config.get('dnsRecord');
@@ -30,7 +30,7 @@ var log = bunyan.createLogger({
       path: LOG_LOCATION
     }
   ]
-});
+})
 
 // Create TRANSIP Instance
 var transipInstance = new TransIP(TRANSIP_LOGIN, TRANSIP_PRIVATE_KEY);
@@ -40,7 +40,7 @@ Promise.all([checkCurrentDns(), checkCurrentWanIP()])
     _.forEach(currentDNSEntries, function(dnsEntry) {
         if(dnsEntry.name === DNS_RECORD) {
           if(dnsEntry.content === currentIP) {
-            log.info('Nothing changed.')
+            log.info('Nothing changed.');
           } else {
             log.info('WAN Has changed to: ', currentIP);
             dnsEntry.content = currentIP;
@@ -73,7 +73,7 @@ function checkCurrentDns() {
           }
         });
       });
-  })
+  });
 }
 
 // Update DNS records
