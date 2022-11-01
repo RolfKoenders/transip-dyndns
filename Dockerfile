@@ -1,12 +1,19 @@
-FROM tarampampam/node:11.10-alpine
+# Python Base Image
+FROM python:3.9-alpine
 
-ADD package.json package.json
+RUN python -m pip install python-transip
 
-RUN apk add --no-cache make gcc g++ python && \
-    npm install --prod && \
-    npm cache clean --force && \
-    apk del make gcc g++ python 
+# Creating Working 
+WORKDIR /py_cronjob
 
-ADD . .
+# Copying the crontab file 
+COPY crontab /etc/cron.d/crontab
 
-CMD npm run start
+# Copy the each file from docker_py_project to py_cronjob in docker container
+ADD . /py_cronjob
+
+# run the crontab file
+RUN crontab /etc/cron.d/crontab
+
+# Executing crontab command
+CMD ["cron", "-f"]
