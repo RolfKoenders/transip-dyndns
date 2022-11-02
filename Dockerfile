@@ -1,19 +1,13 @@
 # Python Base Image
 FROM python:3.9-alpine
 
-RUN python -m pip install python-transip
+RUN apk add -U --no-cache gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev libxslt-dev
 
-# Creating Working 
-WORKDIR /py_cronjob
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir python-transip schedule
 
-# Copying the crontab file 
-COPY crontab /etc/cron.d/crontab
+WORKDIR /transip-ddns
 
-# Copy the each file from docker_py_project to py_cronjob in docker container
-ADD . /py_cronjob
+ADD . /transip-ddns
 
-# run the crontab file
-RUN crontab /etc/cron.d/crontab
-
-# Executing crontab command
-CMD ["cron", "-f"]
+CMD [ "python", "transip-ddns.py" ]

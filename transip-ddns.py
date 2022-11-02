@@ -1,6 +1,8 @@
 import requests
 import json
 import transip
+import schedule
+import time
 
 
 def getConfig(configPath):
@@ -70,4 +72,15 @@ def transipDDNS():
 
 
 if __name__ == "__main__":
+
+    # Do a run from the get go
     transipDDNS()
+
+    # Run every hour.
+    # Check schedule API if you want to change the scheduler
+    # https://github.com/dbader/schedule
+    schedule.every().hour.do(transipDDNS)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
